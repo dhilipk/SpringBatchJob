@@ -13,7 +13,7 @@
 	<bean id="itemProcessor" class="com.studies.sample.processor.CustomProductProcessor" />
 
 	<batch:job id="helloWorldJob">
-	  <batch:step id="step1">
+	  <batch:step id="stepOne">
 		<batch:tasklet>
 			<batch:chunk reader="cvsFileItemReader" writer="writer" processor="itemProcessor" commit-interval="10">
 			</batch:chunk>

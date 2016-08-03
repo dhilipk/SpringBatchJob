@@ -12,6 +12,8 @@ import com.studies.sample.domain.Product;
 public class ProductJdbcItemWriter implements ItemWriter<Product> {
 
 	private JdbcTemplate jdbcTemplate;
+	
+	private static final String UPDATE_PRODUCT = "update ";
 
 	public ProductJdbcItemWriter(DataSource ds) {
 		this.jdbcTemplate = new JdbcTemplate(ds);

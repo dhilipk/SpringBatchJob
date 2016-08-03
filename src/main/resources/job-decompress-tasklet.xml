@@ -1,0 +1,43 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <import resource="config/context.xml" />
+    <import resource="config/database.xml" />
+
+    <batch:job id="ImportProductsJob">
+            <batch:step id="decompressStep">
+                <batch:tasklet ref="decompressTasklet" />
+            </batch:step>
+    </batch:job>
+    <bean id="decompressTasklet" class="com.studies.sample.task.DecompressTasklet" scope="step">
+        <property name="inputResource" value="#{jobParameters['inputFile']}" />
+        <property name="targetDirectory" value="#{jobParameters['targetDirectory']}" />
+        <property name="targetFile" value="#{jobParameters['targetFile']}" />
+    </bean>
+
+    <batch:job id="PaymentProgramJob">
+            <batch:step id="paymentProgramAddition">
+                <batch:tasklet>
+                    <batch:chunk reader="paymentProgramDatabaseReader" writer="paymentProgramDatabaseWriter" commit-interval="2">
+                    </batch:chunk>
+                </batch:tasklet>
+            </batch:step>
+    </batch:job>
+
+    <bean id="paymentProgramDatabaseReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql" value="select ID, PROGRAM_NAME, PROGRAM_AMT, TENURE from PAYMENT_PROGRAM" />
+        <property name="rowMapper">
+            <bean class="com.studies.sample.reader.PaymentProgramMapper" />
+        </property>
+    </bean>
+    
+    <bean id="paymentProgramDatabaseWriter" class="com.studies.sample.writer.PaymentProgramDatabaseWriter">
+        <constructor-arg ref="staggingDataSource" />
+    </bean>
+</beans>
