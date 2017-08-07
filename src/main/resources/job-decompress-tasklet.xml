@@ -20,24 +20,4 @@
         <property name="targetFile" value="#{jobParameters['targetFile']}" />
     </bean>
 
-    <batch:job id="PaymentProgramJob">
-            <batch:step id="paymentProgramAddition">
-                <batch:tasklet>
-                    <batch:chunk reader="paymentProgramDatabaseReader" writer="paymentProgramDatabaseWriter" commit-interval="2">
-                    </batch:chunk>
-                </batch:tasklet>
-            </batch:step>
-    </batch:job>
-
-    <bean id="paymentProgramDatabaseReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
-        <property name="dataSource" ref="dataSource" />
-        <property name="sql" value="select ID, PROGRAM_NAME, PROGRAM_AMT, TENURE from PAYMENT_PROGRAM" />
-        <property name="rowMapper">
-            <bean class="com.studies.sample.reader.PaymentProgramMapper" />
-        </property>
-    </bean>
-    
-    <bean id="paymentProgramDatabaseWriter" class="com.studies.sample.writer.PaymentProgramDatabaseWriter">
-        <constructor-arg ref="staggingDataSource" />
-    </bean>
 </beans>

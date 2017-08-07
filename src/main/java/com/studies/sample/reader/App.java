@@ -15,9 +15,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class App 
 {
 	public static void main(String[] args) {
+		executeBatchHelloWorldJob();
+	  }
 
-
-		String[] springConfig  = {"job-decompress-tasklet.xml"};
+	private static void paymentUpdateToStagging() {
+		String[] springConfig  = {"job-paymentUpdate-jdbcChunk.xml"};
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext(springConfig);
 			
@@ -32,7 +34,7 @@ public class App
 			e.printStackTrace();
 		}
 		System.out.println("Done");
-	  }
+	}
 
 	private static void decompressTasklet() {
 		String[] springConfig  = {"job-decompress-tasklet.xml"};
@@ -52,7 +54,7 @@ public class App
 		System.out.println("Done");
 	}
 
-	private static void executeBatchJob() {
+	private static void executeBatchHelloWorldJob() {
 		String[] springConfig  = {"job-hello-world.xml"};
 			
 		ApplicationContext context = new ClassPathXmlApplicationContext(springConfig);

@@ -42,5 +42,9 @@
         <constructor-arg ref="dataSource" />
     </bean>
 
-
+    <batch:job id="myEmpExpireJob">
+        <batch:step id="readEmployeeData" next="writeEmployeeData"></batch:step>
+        <batch:step id="writeEmployeeData" next="employeeDataProcess"></batch:step>
+        <batch:step id="employeeDataProcess"></batch:step>
+    </batch:job>
 </beans>
